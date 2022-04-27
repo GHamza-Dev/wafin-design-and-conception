@@ -1,0 +1,85 @@
+sequenceDiagram
+
+actor       A as Admin
+actor       C as Client
+actor       P as Provider
+participant S  as :Service
+participant O  as :Order
+participant D  as :Discount
+participant Db as :Database
+
+%% create service
+
+P ->> +S: createService(data)
+activate P
+S ->>  S: validate input fields
+
+alt fields are ok
+    S ->> +Db: insert service
+    Db --) -S: insertion: ok
+    S --)   P: created: ok
+else empty field or wrong data type
+    S --) -P: falied: error message
+end  
+
+%% delete service
+P ->> +S: removeService(serviceId)
+S ->> +Db: delete service
+Db --) -S: delete: ok
+S --) -P: success: service deleted
+deactivate P
+
+%% validate service
+A ->>  +S: validateService(serviceId)
+activate A
+S ->> +Db: update service status
+Db --) -S: updated: ok
+S --)  -A: success: service validated
+deactivate A
+
+%% validate provider
+A ->>  +P: validateProvider(providerId)
+activate A
+P ->> +Db: update provider status
+Db --) -P: updated: ok
+P --)  -A: success: provider validated
+deactivate A
+
+%% create order
+C ->>  +O: createOrder(serviceId,clientId,...)
+activate C
+O ->> +Db: insert order
+Db --) -O: inserted: ok
+O --)  -C: success: order created successfully
+deactivate C
+
+%% accept/reject order
+P ->> +O: accept/rejectOrder(orderId)
+activate P
+O ->> +Db: update order status 
+Db --) -O: updated: ok
+O --) -P: success: order rejected/accepted
+deactivate P
+
+%% create discount
+P ->>  +D: createDiscount(serviceId,...)
+activate P
+D ->> +Db: insert discount
+Db --) -D: inserted: ok
+D --)  -P: success: discount created successfully
+deactivate P
+
+%% activate/deactivate discount
+P ->> +D: activate/deactivate(discountId)
+activate P
+D ->> +Db: update discount status 
+Db --) -D: updated: ok
+D --) -P: success: discount activated/deactivated
+deactivate P
+
+
+
+
+
+
+
