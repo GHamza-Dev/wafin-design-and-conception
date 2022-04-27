@@ -1,0 +1,91 @@
+classDiagram
+    Person <|-- Provider
+    Person <|-- Client
+    Provider "1" *-- "*" Service: provides
+    Order "*" --* "1" Service
+    Service "1" *-- "*" Discount: have
+    Service "1.*" o-- "1" Category: belongs
+    Client "1" -- "*" Order: make
+    Image "*" -- "1" Service: have
+
+    
+    class Person{
+        -nic: string
+        -firstName: string
+        -lastName: string
+        -email: string
+        -phone: string
+
+        +createAccount() void
+        +logIn() void
+        +logOut() void
+    }
+    
+    class Client{
+        -idClient: integer
+    }
+
+    class Provider{
+        -idProvider: integer
+        -status: string
+        -stars: integer
+        -bio:string
+
+        +changeStatus(): void
+    }
+
+    class Service{
+        -idService: integer
+        -title: string
+        -description: string
+        -price: boolean
+        -status: string
+        -type: string
+        -stars: number
+        -location: string
+
+        +createService() void
+        +updateService() void
+        +deleteService() void
+        +validateService() void
+        +displayServices() void        
+    }
+
+    class Category{
+        -idCategory: integer
+        -name :string
+
+        +createCategory() void
+        +getCategories() void
+    }
+
+    class Discount{
+        -idDiscount: integer
+        -status: integer
+        -from: datetime
+        -to: datetime
+        -percentage: float
+
+        +createDiscount() void
+        +activateDiscount() void
+        +disactivateDiscount() void
+    }
+
+    class Image{
+        -idImage: integer
+        +uploadImage()void     
+    }
+
+    class Order{
+        -idOrder: integer
+        -date: date
+        -acceptedAt: date 
+        -completedAt: date
+
+        +createOrder() void
+        +acceptOrder() void
+        +rejectOrder() void
+        +displayOrders() void
+    }
+
+
